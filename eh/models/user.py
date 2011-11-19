@@ -26,12 +26,12 @@ class User(db.Model):
         ''' Set username, generate password hash. '''
 
         self.username = username
-        self.admin = admin
-        self.set_password(password)
+        self.is_admin = admin
+        self.setPassword(password)
 
 
-    def set_password(self, password):
+    def setPassword(self, password):
 
         ''' Generate hash from password, set. '''
 
-        self.hash = generate_password_hash(password)
+        self.password_hash = generate_password_hash(password)
