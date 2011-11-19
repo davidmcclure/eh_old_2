@@ -1,0 +1,4 @@
+env/
+*.db
+key.py
+*.pyc
