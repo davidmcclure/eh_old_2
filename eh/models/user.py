@@ -35,3 +35,26 @@ class User(db.Model):
         ''' Generate hash from password, set. '''
 
         self.password_hash = generate_password_hash(password)
+
+
+    # Table methods:
+
+    @classmethod
+    def administratorExists(self):
+
+        ''' Check if at least one administrator exists. '''
+
+        return True if User.query.count() > 0 else False
+
+
+    @classmethod
+    def userIsAdmin(self, id):
+
+        ''' Check if user with supplied id is an administrator. '''
+
+        try:
+            user = User.query.filter_by(id=id).one()
+            return True if user.is_admin else False
+
+        except:
+            return False
