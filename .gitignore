@@ -1,4 +1,4 @@
-ev/
+env/
 *.db
 key.py
 memory
