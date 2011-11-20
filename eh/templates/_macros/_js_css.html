@@ -1,0 +1,9 @@
+<!-- .js and .css include helpers. -->
+
+{% macro js(path) %}
+    <script type="text/javascript" src="{{ url_for('static', filename=path) }}"></script>
+{% endmacro %}
+
+{% macro css(path) %}
+    <link rel="stylesheet" href="{{ url_for('static', filename=path) }}" />
+{% endmacro %}

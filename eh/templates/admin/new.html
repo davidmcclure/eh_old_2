@@ -1,0 +1,47 @@
+{% extends "admin/admin.html" %}
+{% block title %}New Poem{% endblock %}
+
+{% block admin %}
+
+    <!-- Registration form. -->
+    <form action="" method="post">
+
+        <ul>{% for error in errors._form %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="title">Title:</label>
+        <input name="title" type="text" value="{{ form.title }}" />
+        <ul>{% for error in errors.title %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="url_slug">URL Slug:</label>
+        <input name="url_slug" type="text" value="{{ form.url_slug }}" />
+        <ul>{% for error in errors.url_slug %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="word_round_length">Word Roung Length (seconds):</label>
+        <input name="word_round_length" type="text" value="{{ form.word_round_length }}" />
+        <ul>{% for error in errors.word_round_length %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="slicing_interval">Slicing Interval (seconds):</label>
+        <input name="slicing_interval" type="text" value="{{ form.slicing_interval }}" />
+        <ul>{% for error in errors.slicing_interval %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="min_blind_submissions">Minimum Blind Submissions:</label>
+        <input name="min_blind_submissions" type="text" value="{{ form.min_blind_submissions }}" />
+        <ul>{% for error in errors.min_blind_submissions %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="blind_submission_value">Blind Submission Point Value:</label>
+        <input name="blind_submission_value" type="text" value="{{ form.blind_submission_value }}" />
+        <ul>{% for error in errors.blind_submission_value %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <label for="decay_half_life">Decay Half-Life (seconds):</label>
+        <input name="decay_half_life" type="text" value="{{ form.decay_half_life }}" />
+        <ul>{% for error in errors.decay_half_life %}<li>{{ error }}</li>{%endfor %}</ul>
+
+        <label for="seed_capital">Seed Capital:</label>
+        <input name="seed_capital" type="text" value="{{ form.seed_capital }}" />
+        <ul>{% for error in errors.seed_capital %}<li>{{ error }}</li>{% endfor %}</ul>
+
+        <input type="submit" value="Submit" />
+
+    </form>
+
+{% endblock %}

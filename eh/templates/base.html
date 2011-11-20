@@ -1,0 +1,26 @@
+<!doctype HTML>
+<html lang="en">
+
+<head>
+
+    {% block head %}
+
+    <!-- Context-specific static media. -->
+    {% block css %}{% endblock %}
+    {% block js %}{% endblock %}
+
+    {% endblock %}
+
+    <title>{% block title %}{% endblock %}</title>
+
+</head>
+
+<body>
+
+    <div id="content">
+    {% block content %}{% endblock %}
+    </div>
+
+</body>
+
+</html>

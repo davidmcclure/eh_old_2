@@ -58,3 +58,24 @@ class User(db.Model):
 
         except:
             return False
+
+
+    @classmethod
+    def userNameAvailable(self, username):
+
+        ''' Check if there is an existing user with a given name. '''
+
+        user = User.query.filter_by(username=username).first()
+        return True if user == None else False
+
+
+    @classmethod
+    def createAdministrator(self, username, password):
+
+        ''' Create a new administrator. '''
+
+        user = User(username, password, True)
+        db.session.add(user)
+        db.session.commit()
+
+        return user

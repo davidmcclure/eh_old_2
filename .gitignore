@@ -1,4 +1,5 @@
-env/
+ev/
 *.db
 key.py
+memory
 *.pyc

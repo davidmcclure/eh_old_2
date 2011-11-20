@@ -3,7 +3,7 @@ import datetime
 
 # Create Flask application.
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///memory'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dev.db'
 app.permanent_session_lifetime = datetime.timedelta(minutes = 10)
 
 # Import and set the session key.
