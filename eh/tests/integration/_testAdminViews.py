@@ -122,5 +122,20 @@ class AdminRegisterTest(i.IntegrationTestCase):
         self.assertTrue(check_password_hash(user.password_hash, 'password'))
 
 
+class AdminLogoutTest(i.IntegrationTestCase):
+
+    ''' /admin/logout '''
+
+
+    def testRedirect(self):
+
+        ''' The logout route should always redirect to login. '''
+
+        # With no user_id in the session hash.
+        with self.app as c:
+            rv = c.get('admin/logout')
+            self.assertRedirect(rv, '/admin/login')
+
+
 if __name__ == '__main__':
     i.unittest.main()
