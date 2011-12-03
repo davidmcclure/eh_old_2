@@ -14,15 +14,5 @@ app.secret_key = key.secret
 from flaskext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 
-# Import APScheduler assets and configure scheduler.
-from apscheduler.scheduler import Scheduler
-from apscheduler.jobstores.ram_store import RAMJobStore
-
-# Initialize the scheduler, scrubs jobs, start.
-sched = Scheduler()
-sched.add_jobstore(RAMJobStore(), 'slicers')
-for job in sched.get_jobs(): sched.unschedule_job(job)
-sched.start()
-
 # Import application assets.
 from eh.views import admin

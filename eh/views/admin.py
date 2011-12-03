@@ -51,10 +51,15 @@ def register():
                 password,
                 confirm)
 
-        # If valid, create the new administrator.
+        # If valid.
         if not errors:
 
-            admin = models.User.createAdministrator(username, password)
+            # Create the administrator.
+            admin = models.User.createAdministrator(
+                    username,
+                    password)
+
+            # Record the id, redirect.
             session['user_id'] = admin.id
             return redirect(url_for('browse'))
 
