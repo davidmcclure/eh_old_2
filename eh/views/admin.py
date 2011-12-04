@@ -10,8 +10,8 @@ import eh.models as models
 
 
 @app.route('/admin')
-@auth.requiresAdmin
-@auth.requiresAdminLogin
+@auth.isInstalled
+@auth.isAdmin
 def browse():
 
     ''' Create and run haiku. '''
@@ -20,17 +20,22 @@ def browse():
 
 
 @app.route('/admin/new', methods=['GET', 'POST'])
-@auth.requiresAdmin
-@auth.requiresAdminLogin
+@auth.isInstalled
+@auth.isAdmin
 def new():
 
     ''' Create a new haiku. '''
 
-    return '/admin/new'
+    errors = None
+
+    return render_template(
+            'admin/new.html',
+            errors = errors,
+            form = request.form)
 
 
 @app.route('/admin/register', methods=['GET', 'POST'])
-@auth.requiresNoAdmin
+@auth.isNotInstalled
 def register():
 
     ''' First admin registration. '''
@@ -71,16 +76,44 @@ def register():
 
 
 @app.route('/admin/login', methods=['GET', 'POST'])
-@auth.requiresAdmin
-@auth.requiresAdminNoLogin
+@auth.isInstalled
+@auth.isNotAdmin
 def login():
 
     ''' Admin login. '''
 
-    return '/admin/login'
+    errors = None
+
+    # If a form was posted.
+    if request.method == 'POST':
+
+        # Gather post.
+        username = request.form['username']
+        password = request.form['password']
+
+        # Validate form.
+        errors = validation.validateAdminLogin(
+                username,
+                password)
+
+        # If valid.
+        if not errors:
+
+            # Get the user record.
+            admin = models.User.getUserByName(username)
+
+            # Record the id, redirect.
+            session['user_id'] = admin.id
+            return redirect(url_for('browse'))
+
+    return render_template(
+            'admin/login.html',
+            errors = errors,
+            form = request.form)
 
 
 @app.route('/admin/logout')
+@auth.isInstalled
 def logout():
 
     ''' Admin logout. '''

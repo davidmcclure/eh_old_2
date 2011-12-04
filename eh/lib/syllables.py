@@ -5,6 +5,7 @@ Syllable count dictionary.
 # Copyright (C) 1993-2008 Carnegie Mellon University. All rights reserved.
 
 syllables = {
+
 "A": 1,
 "A'S": 1,
 "A.": 1,
@@ -123616,4 +123617,5 @@ syllables = {
 "ZYUGANOV": 3,
 "ZYUGANOV'S": 3,
 "ZYWICKI": 3
+
 }

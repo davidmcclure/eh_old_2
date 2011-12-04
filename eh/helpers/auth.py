@@ -6,56 +6,78 @@ from flask import request, Response, redirect, url_for, session
 import eh.models as models
 from functools import wraps
 
+def isAdmin(f):
 
-def requiresAdmin(f):
-
-    ''' Is there at least one administrator? '''
-
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not models.User.administratorExists():
-            return redirect(url_for('register'))
-        return f(*args, **kwargs)
-    return decorated
-
-
-def requiresAdminLogin(f):
-
-    ''' Is the user an administrator and logged in? '''
+    ''' If there is a logged-in administrator. '''
 
     @wraps(f)
     def decorated(*args, **kwargs):
-        if 'user_id' in session:
+
+        # If no user_id in the session, redirect to login.
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
+
+        # If the user is an administrator, execute the browse method;
+        # otherwise, redirect to login
+        else:
             id = session['user_id']
             if models.User.userIsAdmin(id): return f(*args, **kwargs)
-            else: return redirect(url_for('logout'))
-        else:
-            session['login_target'] = request.script_root
-            return redirect(url_for('login'))
+            else: return redirect(url_for('login'))
+
     return decorated
 
 
-def requiresAdminNoLogin(f):
+def isNotAdmin(f):
 
-    ''' Is the user not logged in? '''
+    ''' If there is not a logged-in administrator. '''
 
     @wraps(f)
     def decorated(*args, **kwargs):
+
+        # If no user_id in the session, redirect to login.
         if 'user_id' not in session:
             return f(*args, **kwargs)
+
+        # If the user is an administrator, execute the browse method;
+        # otherwise, redirect to login
         else:
-            return redirect(url_for('browse'))
+            id = session['user_id']
+            if models.User.userIsAdmin(id): return redirect(url_for('browse'))
+            else: return f(*args, **kwargs)
+
     return decorated
 
 
-def requiresNoAdmin(f):
+def isInstalled(f):
 
-    ''' Are there no administrators? '''
+    ''' If the application has been installed. '''
 
     @wraps(f)
     def decorated(*args, **kwargs):
-        if models.User.administratorExists():
-            return redirect(url_for('login'))
-        else:
+
+        # Check for administrators in the database.
+        if models.User.userExists():
             return f(*args, **kwargs)
+
+        # If no administrators, redirect to register.
+        else:
+            return redirect(url_for('register'))
+
+    return decorated
+
+
+def isNotInstalled(f):
+
+    ''' If the application has not been installed. '''
+
+    @wraps(f)
+    def decorated(*args, **kwargs):
+
+        # Check for no administrators in the database.
+        if not models.User.userExists():
+            return f(*args, **kwargs)
+
+        else:
+            return redirect(url_for('admin'))
+
     return decorated

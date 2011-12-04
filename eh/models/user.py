@@ -37,12 +37,19 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
 
+    def checkPassword(self, password):
+
+        ''' Check a supplied password against the hash. '''
+
+        return check_password_hash(self.password_hash, password)
+
+
     # Table methods:
 
     @classmethod
-    def administratorExists(self):
+    def userExists(self):
 
-        ''' Check if at least one administrator exists. '''
+        ''' Check if at least one user exists. '''
 
         return True if User.query.count() > 0 else False
 
@@ -70,11 +77,32 @@ class User(db.Model):
 
 
     @classmethod
+    def getUserByName(self, username):
+
+        ''' Get user with a given name. '''
+
+        user = User.query.filter_by(username=username).first()
+        return user if user != None else False
+
+
+    @classmethod
     def createAdministrator(self, username, password):
 
         ''' Create a new administrator. '''
 
         user = User(username, password, True)
+        db.session.add(user)
+        db.session.commit()
+
+        return user
+
+
+    @classmethod
+    def createUser(self, username, password):
+
+        ''' Create a new user. '''
+
+        user = User(username, password, False)
         db.session.add(user)
         db.session.commit()
 
