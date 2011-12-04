@@ -141,9 +141,12 @@ class AdminLogoutTest(i.IntegrationTestCase):
             # Check for the presence of the id.
             self.assertEquals(s['user_id'], 1)
 
-            # Hit the logout route, confirm that the id is gone.
+            # Hit the logout route.
             rv = c.get('admin/logout')
-            self.assertNotIn('user_id', s)
+
+            # Confirm that the id is gone.
+            with c.session_transaction() as s:
+                self.assertNotIn('user_id', s)
 
 
     def testRedirect(self):
