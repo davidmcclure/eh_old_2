@@ -28,6 +28,47 @@ def new():
 
     errors = None
 
+    # If a form was posted.
+    if request.method == 'POST':
+
+        # Gather post.
+        title =             request.form['title']
+        slug =              request.form['url_slug']
+        roundLength =       request.form['word_round_length']
+        interval =          request.form['slicing_interval']
+        minSubmissions =    request.form['min_blind_submissions']
+        submissionValue =   request.form['blind_submission_value']
+        halfLife =          request.form['decay_half_life']
+        capital =           request.form['seed_capital']
+
+        # Validate form.
+        errors = validation.validateHaiku(
+                title,
+                slug,
+                roundLength,
+                interval,
+                minSubmissions,
+                submissionValue,
+                halfLife,
+                capital)
+
+        # If valid.
+        if not errors:
+
+            # Create the administrator.
+            haiku = models.Haiku.createHaiku(
+                    title,
+                    slug,
+                    round_length,
+                    interval,
+                    min_submissions,
+                    submission_value,
+                    half_life,
+                    capital)
+
+            # Record the id, redirect.
+            return redirect(url_for('browse'))
+
     return render_template(
             'admin/new.html',
             errors = errors,
