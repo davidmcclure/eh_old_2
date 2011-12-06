@@ -49,9 +49,15 @@ def isNotAdmin(f):
         # If the user is an administrator, execute the browse method;
         # otherwise, redirect to login
         else:
+
+            # Get the id.
             id = session['user_id']
-            if models.User.userIsAdmin(id): return redirect(url_for('browse'))
-            else: return f(*args, **kwargs)
+
+            # If admin, redirect to browse.
+            if models.User.userIsAdmin(id):
+                return redirect(url_for('browse'))
+            else:
+                return f(*args, **kwargs)
 
     return decorated
 
