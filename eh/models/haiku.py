@@ -17,10 +17,9 @@ class Haiku(db.Model):
 
     # System attributes:
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(60), unique=True)
+    url_slug = db.Column(db.String(40), unique=True)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_on = db.Column(db.DateTime)
-    url_slug = db.Column(db.String(40), unique=True)
     started = db.Column(db.Boolean, default=False)
     finished = db.Column(db.Boolean, default=False)
     is_running = db.Column(db.Boolean, default=False)
@@ -38,7 +37,6 @@ class Haiku(db.Model):
 
     def __init__(self,
             userId,
-            title,
             slug,
             roundLength,
             interval,
@@ -50,7 +48,6 @@ class Haiku(db.Model):
         ''' Set parameters. '''
 
         self.created_by =               userId
-        self.title =                    title
         self.url_slug =                 slug
         self.created_on =               dt.datetime.now()
         self.word_round_length =        roundLength
@@ -66,7 +63,6 @@ class Haiku(db.Model):
     @classmethod
     def createHaiku(self,
             userId,
-            title,
             slug,
             roundLength,
             interval,
@@ -79,7 +75,6 @@ class Haiku(db.Model):
 
         haiku = Haiku(
                 userId,
-                title,
                 slug,
                 roundLength,
                 interval,

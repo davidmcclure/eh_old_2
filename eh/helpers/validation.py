@@ -1,5 +1,5 @@
 '''
-Validation logic.
+Form scrubbers.
 '''
 
 import eh.models as models
@@ -99,7 +99,6 @@ def validateAdminLogin(
 
 
 def validateHaiku(
-        title,
         slug,
         roundLength,
         interval,
@@ -113,7 +112,6 @@ def validateHaiku(
     is_error = False
     errors = {}
     errors['_form'] = []
-    errors['title'] = []
     errors['url_slug'] = []
     errors['word_round_length'] = []
     errors['slicing_interval'] = []
@@ -121,11 +119,6 @@ def validateHaiku(
     errors['blind_submission_value'] = []
     errors['decay_half_life'] = []
     errors['seed_capital'] = []
-
-    # Title present?
-    if not title:
-        errors['title'].append(e['noTitle'])
-        is_error = True
 
     # Slug present?
     if not slug:
@@ -143,10 +136,11 @@ def validateHaiku(
         is_error = True
 
     # Round length an integer?
-    try: int(roundLength)
-    except ValueError:
-        errors['word_round_length'].append(e['mustBeInt'])
-        is_error = True
+    else:
+        try: int(roundLength)
+        except ValueError:
+            errors['word_round_length'].append(e['mustBeInt'])
+            is_error = True
 
     # Slicing interval present?
     if not interval:
@@ -154,21 +148,23 @@ def validateHaiku(
         is_error = True
 
     # Slicing interval an integer?
-    try: int(interval)
-    except ValueError:
-        errors['slicing_interval'].append(e['mustBeInt'])
-        is_error = True
+    else:
+        try: int(interval)
+        except ValueError:
+            errors['slicing_interval'].append(e['mustBeInt'])
+            is_error = True
 
     # Minimum blind submissions present?
     if not minSubmissions:
         errors['min_blind_submissions'].append(e['noMinSubmissions'])
         is_error = True
 
-    # Slicing interval an integer?
-    try: int(minSubmissions)
-    except ValueError:
-        errors['min_blind_submissions'].append(e['mustBeInt'])
-        is_error = True
+    # Minimum blind submissions an integer?
+    else:
+        try: int(minSubmissions)
+        except ValueError:
+            errors['min_blind_submissions'].append(e['mustBeInt'])
+            is_error = True
 
     # Blind submission value present?
     if not submissionValue:
@@ -176,10 +172,11 @@ def validateHaiku(
         is_error = True
 
     # Blind submission value an integer?
-    try: int(submissionValue)
-    except ValueError:
-        errors['blind_submission_value'].append(e['mustBeInt'])
-        is_error = True
+    else:
+        try: int(submissionValue)
+        except ValueError:
+            errors['blind_submission_value'].append(e['mustBeInt'])
+            is_error = True
 
     # Half-life value present?
     if not halfLife:
@@ -187,10 +184,11 @@ def validateHaiku(
         is_error = True
 
     # Half life an integer?
-    try: int(halfLife)
-    except ValueError:
-        errors['decay_half_life'].append(e['mustBeInt'])
-        is_error = True
+    else:
+        try: int(halfLife)
+        except ValueError:
+            errors['decay_half_life'].append(e['mustBeInt'])
+            is_error = True
 
     # Seed capital present?
     if not capital:
@@ -198,10 +196,11 @@ def validateHaiku(
         is_error = True
 
     # Seed capital an integer?
-    try: int(capital)
-    except ValueError:
-        errors['seed_capital'].append(e['mustBeInt'])
-        is_error = True
+    else:
+        try: int(capital)
+        except ValueError:
+            errors['seed_capital'].append(e['mustBeInt'])
+            is_error = True
 
     if not is_error: errors = None
 

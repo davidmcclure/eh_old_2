@@ -8,10 +8,6 @@
 
         <ul>{% for error in errors._form %}<li>{{ error }}</li>{% endfor %}</ul>
 
-        <label for="title">Title:</label>
-        <input name="title" type="text" value="{{ form.title }}" />
-        <ul>{% for error in errors.title %}<li>{{ error }}</li>{% endfor %}</ul>
-
         <label for="url_slug">URL Slug:</label>
         <input name="url_slug" type="text" value="{{ form.url_slug }}" />
         <ul>{% for error in errors.url_slug %}<li>{{ error }}</li>{% endfor %}</ul>

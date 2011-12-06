@@ -32,7 +32,6 @@ def new(admin):
     if request.method == 'POST':
 
         # Gather post.
-        title =             request.form['title']
         slug =              request.form['url_slug']
         roundLength =       request.form['word_round_length']
         interval =          request.form['slicing_interval']
@@ -43,7 +42,6 @@ def new(admin):
 
         # Validate form.
         errors = validation.validateHaiku(
-                title,
                 slug,
                 roundLength,
                 interval,
@@ -58,7 +56,6 @@ def new(admin):
             # Create the administrator.
             haiku = models.Haiku.createHaiku(
                     admin.id,
-                    title,
                     slug,
                     roundLength,
                     interval,
