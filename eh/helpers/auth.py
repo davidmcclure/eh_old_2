@@ -92,6 +92,6 @@ def isNotInstalled(f):
             return f(*args, **kwargs)
 
         else:
-            return redirect(url_for('admin'))
+            return redirect(url_for('browse'))
 
     return decorated
