@@ -12,7 +12,10 @@ class User(db.Model):
 
     ''' Participants and administrators. '''
 
+    # Table name.
     __tablename__ = 'users'
+
+    # User attributes.
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True)
     password_hash = db.Column(db.String(60))
@@ -65,15 +68,6 @@ class User(db.Model):
 
         except:
             return False
-
-
-    @classmethod
-    def userNameAvailable(self, username):
-
-        ''' Check if there is an existing user with a given name. '''
-
-        user = User.query.filter_by(username=username).first()
-        return True if user == None else False
 
 
     @classmethod

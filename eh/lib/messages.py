@@ -17,6 +17,7 @@ errors = {
 # Haiku.
 'noTitle':                      'Enter a title.',
 'noSlug':                       'Enter a url slug.',
+'slugTaken':                    'Slug taken.',
 'noRoundLength':                'Enter a word round length.',
 'noInterval':                   'Enter a slicing interval.',
 'noMinSubmissions':             'Enter a minimum number of blind submissions.',

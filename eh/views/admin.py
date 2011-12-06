@@ -12,7 +12,7 @@ import eh.models as models
 @app.route('/admin')
 @auth.isInstalled
 @auth.isAdmin
-def browse():
+def browse(admin):
 
     ''' Create and run haiku. '''
 
@@ -22,7 +22,7 @@ def browse():
 @app.route('/admin/new', methods=['GET', 'POST'])
 @auth.isInstalled
 @auth.isAdmin
-def new():
+def new(admin):
 
     ''' Create a new haiku. '''
 
@@ -57,13 +57,14 @@ def new():
 
             # Create the administrator.
             haiku = models.Haiku.createHaiku(
+                    admin.id,
                     title,
                     slug,
-                    round_length,
+                    roundLength,
                     interval,
-                    min_submissions,
-                    submission_value,
-                    half_life,
+                    minSubmissions,
+                    submissionValue,
+                    halfLife,
                     capital)
 
             # Record the id, redirect.

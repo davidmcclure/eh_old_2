@@ -17,11 +17,19 @@ def isAdmin(f):
         if 'user_id' not in session:
             return redirect(url_for('login'))
 
-        # If the user is an administrator, execute the browse method;
-        # otherwise, redirect to login
+        # If the user is an administrator, pass the user object into
+        # the method; otherwise, redirect to login.
         else:
+
+            # Get the id.
             id = session['user_id']
-            if models.User.userIsAdmin(id): return f(*args, **kwargs)
+
+            # If admin, pass user object.
+            if models.User.userIsAdmin(id):
+                admin = models.User.query.get(id)
+                kwargs['admin'] = admin
+                return f(*args, **kwargs)
+
             else: return redirect(url_for('login'))
 
     return decorated

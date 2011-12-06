@@ -26,7 +26,7 @@ def validateAdminRegistration(
         is_error = True
 
     # Username available?
-    elif not models.User.userNameAvailable(username):
+    elif models.User.getUserByName(username):
         errors['username'].append(e['usernameTaken'])
         is_error = True
 
@@ -130,6 +130,11 @@ def validateHaiku(
     # Slug present?
     if not slug:
         errors['url_slug'].append(e['noSlug'])
+        is_error = True
+
+    # Slug taken?
+    if models.Haiku.getHaikuBySlug(slug):
+        errors['url_slug'].append(e['slugTaken'])
         is_error = True
 
     # Round length present?
