@@ -5,21 +5,7 @@
 
     <ul>
         {% for h in haiku %}
-        <li>
-
-            <strong>{{ h.title }}</strong>
-
-            {% if not h.is_running %}
-                [<a href="{{ url_for('start', pk=h.id) }}">Start</a>
-            {% else %}
-                [<a href="{{ url_for('stop', pk=h.id) }}">Stop</a>
-            {% endif %}
-
-            <a href="{{ url_for('delete', pk=h.id) }}">Delete</a>]
-
-            [<a href="/{{ h.url_slug }}">/{{ h.url_slug }}</a>]
-
-        </li>
+        <li><a href="/{{ h.url_slug }}">/{{ h.url_slug }}</a></li>
         {% endfor %}
     </ul>
 

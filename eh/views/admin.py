@@ -16,7 +16,12 @@ def browse(admin):
 
     ''' Create and run haiku. '''
 
-    return render_template('admin/browse.html')
+    # Get all haiku.
+    haiku = models.Haiku.query.all()
+
+    return render_template(
+            'admin/browse.html',
+            haiku = haiku)
 
 
 @app.route('/admin/new', methods=['GET', 'POST'])
