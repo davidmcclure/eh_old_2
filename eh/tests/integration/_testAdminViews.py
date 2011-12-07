@@ -92,6 +92,15 @@ class AdminRegisterTest(i.IntegrationTestCase):
 
 
 
+class AdminLoginTest(i.IntegrationTestCase):
+
+    ''' /admin/login '''
+
+
+    pass
+
+
+
 class AdminLogoutTest(i.IntegrationTestCase):
 
     ''' /admin/logout '''
@@ -131,15 +140,6 @@ class AdminLogoutTest(i.IntegrationTestCase):
         # With no user_id in the session hash.
         rv = self.app.get('/admin/logout')
         self.assertRedirect(rv, '/admin/login')
-
-
-
-class AdminLoginTest(i.IntegrationTestCase):
-
-    ''' /admin/login '''
-
-
-    pass
 
 
 if __name__ == '__main__':
