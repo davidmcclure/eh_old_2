@@ -84,6 +84,7 @@ class Haiku(db.Model):
                 capital)
 
         db.session.add(haiku)
+        db.session.commit()
 
         return haiku
 
@@ -104,6 +105,7 @@ class Haiku(db.Model):
 
         haiku = Haiku.query.get(id)
         db.session.delete(haiku)
+        db.session.commit()
 
 
     @classmethod

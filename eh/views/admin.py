@@ -69,9 +69,6 @@ def new(admin):
                     halfLife,
                     capital)
 
-            # Commit the session.
-            db.session.commit()
-
             # Record the id, redirect.
             return redirect(url_for('browse'))
 
@@ -109,7 +106,6 @@ def delete(admin, id):
     ''' Delete a haiku. '''
 
     models.Haiku.deleteHaiku(id)
-    db.session.commit()
 
     return redirect(url_for('browse'))
 
