@@ -58,7 +58,7 @@ def new(admin):
         # If valid.
         if not errors:
 
-            # Create the administrator.
+            # Create the haiku.
             haiku = models.Haiku.createHaiku(
                     admin.id,
                     slug,
@@ -69,6 +69,9 @@ def new(admin):
                     halfLife,
                     capital)
 
+            # Commit the session.
+            db.session.commit()
+
             # Record the id, redirect.
             return redirect(url_for('browse'))
 
@@ -76,6 +79,39 @@ def new(admin):
             'admin/new.html',
             errors = errors,
             form = request.form)
+
+
+@app.route('/admin/start/<id>')
+@auth.isInstalled
+@auth.isAdmin
+def start(admin, id):
+
+    ''' Start a haiku. '''
+
+    pass
+
+
+@app.route('/admin/stop/<id>')
+@auth.isInstalled
+@auth.isAdmin
+def stop(admin, id):
+
+    ''' Stop a haiku. '''
+
+    pass
+
+
+@app.route('/admin/delete/<id>')
+@auth.isInstalled
+@auth.isAdmin
+def delete(admin, id):
+
+    ''' Delete a haiku. '''
+
+    models.Haiku.deleteHaiku(id)
+    db.session.commit()
+
+    return redirect(url_for('browse'))
 
 
 @app.route('/admin/register', methods=['GET', 'POST'])

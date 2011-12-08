@@ -3,10 +3,18 @@
 
 {% block admin %}
 
-    <ul>
+    <table>
         {% for h in haiku %}
-        <li><a href="/{{ h.url_slug }}">/{{ h.url_slug }}</a></li>
+        <tr>
+            <td><a href="/{{ h.url_slug }}">/{{ h.url_slug }}</a></td>
+            {% if not h.is_running %}
+            <td><a href="{{ url_for('start', id=h.id) }}">start</a></td>
+            {% else %}
+            <td><a href="{{ url_for('stop', id=h.id) }}">stop</a></td>
+            {% endif %}
+            <td><a href="{{ url_for('delete', id=h.id) }}">delete</a></td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 
 {% endblock %}

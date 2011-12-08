@@ -84,7 +84,6 @@ class Haiku(db.Model):
                 capital)
 
         db.session.add(haiku)
-        db.session.commit()
 
         return haiku
 
@@ -96,3 +95,28 @@ class Haiku(db.Model):
 
         haiku = Haiku.query.filter_by(url_slug=slug).first()
         return haiku if haiku != None else False
+
+
+    @classmethod
+    def deleteHaiku(self, id):
+
+        ''' Delete a haiku. '''
+
+        haiku = Haiku.query.get(id)
+        db.session.delete(haiku)
+
+
+    @classmethod
+    def startHaiku(self, id):
+
+        ''' Start a haiku. '''
+
+        pass
+
+
+    @classmethod
+    def stopHaiku(self, id):
+
+        ''' Stop a haiku. '''
+
+        pass
