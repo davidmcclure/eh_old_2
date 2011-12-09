@@ -4,10 +4,11 @@ Unit tests for the user model.
 
 # Get the abstract class and models.
 import IntegrationTestCase as i
-from eh.models import User
+from eh.models import User, Haiku
 from eh.lib.messages import errors as e
 from werkzeug.security import check_password_hash
 from flask import session
+import math
 
 
 class AdminBrowseTest(i.IntegrationTestCase):
@@ -24,7 +25,109 @@ class AdminNewTest(i.IntegrationTestCase):
     ''' /admin/new '''
 
 
-    pass
+    def testForm(self):
+
+        ''' With a GET request, /admin/new should show the form. '''
+
+        # Create an admin.
+        admin = User.createAdministrator('username', 'password')
+
+        with self.app as c:
+
+            # Push in a user id.
+            with c.session_transaction() as s:
+                s['user_id'] = admin.id
+
+            # Hit the route.
+            rv = c.get('/admin/new')
+            self.assertTemplateUsed('admin/new.html')
+
+
+    def testFailure(self):
+
+        ''' Flash errors for invalid submission. '''
+
+        # Create an admin.
+        admin = User.createAdministrator('username', 'password')
+
+        with self.app as c:
+
+            # Push in a user id.
+            with c.session_transaction() as s:
+                s['user_id'] = admin.id
+
+            # At start, no haiku.
+            self.assertEquals(Haiku.query.count(), 0)
+
+            # Empty fields
+            rv = c.post('/admin/new', data=dict(
+                url_slug = '',
+                word_round_length = '',
+                slicing_interval = '',
+                min_blind_submissions = '',
+                blind_submission_value = '',
+                decay_half_life = '',
+                seed_capital = ''
+            ), follow_redirects=True)
+
+            # Should re-render register template.
+            self.assertTemplateUsed('admin/new.html')
+
+            # Check for errors.
+            assert e['noSlug'] in rv.data
+            assert e['noRoundLength'] in rv.data
+            assert e['noInterval'] in rv.data
+            assert e['noMinSubmissions'] in rv.data
+            assert e['noSubmissionValue'] in rv.data
+            assert e['noHalfLife'] in rv.data
+            assert e['noCapital'] in rv.data
+
+            # No user should have been created.
+            self.assertEquals(Haiku.query.count(), 0)
+
+
+    def testSuccess(self):
+
+        ''' Valid form should create new haiku. '''
+
+        # Create an admin.
+        admin = User.createAdministrator('username', 'password')
+
+        with self.app as c:
+
+            # Push in a user id.
+            with c.session_transaction() as s:
+                s['user_id'] = admin.id
+
+            # At start, no haiku.
+            self.assertEquals(Haiku.query.count(), 0)
+
+            # Empty fields
+            rv = c.post('/admin/new', data=dict(
+                url_slug = 'test',
+                word_round_length = 1000,
+                slicing_interval = 1,
+                min_blind_submissions = 5,
+                blind_submission_value = 100,
+                decay_half_life = 30,
+                seed_capital = 1000
+            ), follow_redirects=True)
+
+            # Should re-render register template.
+            self.assertTemplateUsed('admin/browse.html')
+
+            # No user should have been created.
+            self.assertEquals(Haiku.query.count(), 1)
+
+            # Get the haiku and test the attributes.
+            haiku = Haiku.query.first()
+            self.assertEquals(haiku.url_slug, 'test')
+            self.assertEquals(haiku.word_round_length, 1000)
+            self.assertEquals(haiku.slicing_interval, 1)
+            self.assertEquals(haiku.min_blind_submissions, 5)
+            self.assertEquals(haiku.blind_submission_value, 100)
+            self.assertEquals(haiku.decay_mean_lifetime, 30 / math.log(2))
+            self.assertEquals(haiku.seed_capital, 1000)
 
 
 
@@ -33,7 +136,42 @@ class AdminStartTest(i.IntegrationTestCase):
     ''' /admin/start '''
 
 
-    pass
+    def testDelete(self):
+
+        ''' A GET request should delete the haiku. '''
+
+        # Create an admin and haiku.
+        admin = User.createAdministrator('username', 'password')
+
+        # Create 2 haiku.
+        haiku1 = Haiku.createHaiku(
+                admin.id, 'test1', 1000, 1, 5, 100, 30, 1000)
+        haiku2 = Haiku.createHaiku(
+                admin.id, 'test2', 1000, 1, 5, 100, 30, 1000)
+
+        with self.app as c:
+
+            # Re-get the haiku.
+            haiku1 = Haiku.getHaikuBySlug('test1')
+            haiku2 = Haiku.getHaikuBySlug('test2')
+
+            # Push in a user id.
+            with c.session_transaction() as s:
+                s['user_id'] = admin.id
+
+            # At the start, 2 records.
+            self.assertEquals(Haiku.query.count(), 2)
+
+            # Hit the route.
+            rv = c.get('/admin/delete/' + str(haiku1.id), follow_redirects=True)
+            self.assertTemplateUsed('admin/browse.html')
+
+            # 1 record.
+            self.assertEquals(Haiku.query.count(), 1)
+
+            # Check that the right record was deleted.
+            haiku = Haiku.query.first()
+            self.assertEquals(haiku.id, haiku2.id)
 
 
 
@@ -46,9 +184,27 @@ class AdminStopTest(i.IntegrationTestCase):
 
 
 
+class AdminDeleteTest(i.IntegrationTestCase):
+
+    ''' /admin/delete '''
+
+
+    pass
+
+
+
 class AdminRegisterTest(i.IntegrationTestCase):
 
     ''' /admin/register '''
+
+
+    def testForm(self):
+
+        ''' With a GET request, /admin/register should show the form. '''
+
+        # Hit with GET.
+        rv = self.app.get('/admin/register')
+        self.assertTemplateUsed('admin/register.html')
 
 
     def testFailure(self):
@@ -107,6 +263,18 @@ class AdminRegisterTest(i.IntegrationTestCase):
 class AdminLoginTest(i.IntegrationTestCase):
 
     ''' /admin/login '''
+
+
+    def testForm(self):
+
+        ''' With a GET request, /admin/login should show the form. '''
+
+        # Create an admin.
+        admin = User.createAdministrator('username', 'password')
+
+        # Hit with GET.
+        rv = self.app.get('/admin/login')
+        self.assertTemplateUsed('admin/login.html')
 
 
     def testFailure(self):

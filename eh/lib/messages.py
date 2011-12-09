@@ -15,7 +15,6 @@ errors = {
 'notAuthorized':                'Your do not have access to this page.',
 
 # Haiku.
-'noTitle':                      'Enter a title.',
 'noSlug':                       'Enter a url slug.',
 'slugTaken':                    'Slug taken.',
 'noRoundLength':                'Enter a word round length.',
