@@ -15,11 +15,34 @@ class AdminBrowseTest(i.IntegrationTestCase):
     ''' /admin '''
 
 
-    def testHaikuListing(self):
+    pass
 
-        ''' The browse view should display the haiku. '''
 
-        pass
+
+class AdminNewTest(i.IntegrationTestCase):
+
+    ''' /admin/new '''
+
+
+    pass
+
+
+
+class AdminStartTest(i.IntegrationTestCase):
+
+    ''' /admin/start '''
+
+
+    pass
+
+
+
+class AdminStopTest(i.IntegrationTestCase):
+
+    ''' /admin/stop '''
+
+
+    pass
 
 
 
@@ -28,9 +51,9 @@ class AdminRegisterTest(i.IntegrationTestCase):
     ''' /admin/register '''
 
 
-    def testEmptyFields(self):
+    def testFailure(self):
 
-        ''' Flash errors for empty fields. '''
+        ''' Flash errors for invalid submission. '''
 
         # At start, no users.
         self.assertEquals(User.query.count(), 0)
@@ -54,31 +77,7 @@ class AdminRegisterTest(i.IntegrationTestCase):
         self.assertEquals(User.query.count(), 0)
 
 
-    def testPasswordConfirmationMismatch(self):
-
-        ''' Flash errors for not-matching password confirm. '''
-
-        # At start, no users.
-        self.assertEquals(User.query.count(), 0)
-
-        # Empty fields
-        rv = self.app.post('/admin/register', data=dict(
-            username = 'username',
-            password = 'password',
-            confirm = 'nomatch',
-        ), follow_redirects=True)
-
-        # Should re-render register template.
-        self.assertTemplateUsed('admin/register.html')
-
-        # Check for errors.
-        assert e['confirmDoesNotMatch'] in rv.data
-
-        # No user should have been created.
-        self.assertEquals(User.query.count(), 0)
-
-
-    def testAdminCreation(self):
+    def testSuccess(self):
 
         ''' Valid registration form should create user. '''
 
@@ -110,7 +109,7 @@ class AdminLoginTest(i.IntegrationTestCase):
     ''' /admin/login '''
 
 
-    def testEmptyFields(self):
+    def testFailure(self):
 
         ''' Flash errors when fields are empty. '''
 
@@ -137,85 +136,7 @@ class AdminLoginTest(i.IntegrationTestCase):
                 self.assertNotIn('user_id', s)
 
 
-    def testEmptyFields(self):
-
-        ''' Flash errors with non-existent username. '''
-
-        # Create an admin.
-        admin = User.createAdministrator('username', 'password')
-
-        with self.app as c:
-
-            # Empty fields
-            rv = c.post('/admin/login', data=dict(
-                username = 'doesnotexist',
-                password = 'password'
-            ), follow_redirects=True)
-
-            # Should re-render login template.
-            self.assertTemplateUsed('admin/login.html')
-
-            # Check for errors.
-            assert e['usernameDoesNotExist'] in rv.data
-
-            # Confirm that there is no id.
-            with c.session_transaction() as s:
-                self.assertNotIn('user_id', s)
-
-
-    def testWrongPassword(self):
-
-        ''' Flash errors with incorrect password. '''
-
-        # Create an admin.
-        admin = User.createAdministrator('username', 'password')
-
-        with self.app as c:
-
-            # Empty fields
-            rv = c.post('/admin/login', data=dict(
-                username = 'username',
-                password = 'wrong'
-            ), follow_redirects=True)
-
-            # Should re-render login template.
-            self.assertTemplateUsed('admin/login.html')
-
-            # Check for errors.
-            assert e['incorrectPassword'] in rv.data
-
-            # Confirm that there is no id.
-            with c.session_transaction() as s:
-                self.assertNotIn('user_id', s)
-
-
-    def testNotAuthorized(self):
-
-        ''' Flash errors with non-admin credentials. '''
-
-        # Create an admin.
-        admin = User.createUser('username', 'password')
-
-        with self.app as c:
-
-            # Empty fields
-            rv = c.post('/admin/login', data=dict(
-                username = 'username',
-                password = 'password'
-            ), follow_redirects=True)
-
-            # Should re-render login template.
-            self.assertTemplateUsed('admin/login.html')
-
-            # Check for errors.
-            assert e['notAuthorized'] in rv.data
-
-            # Confirm that there is no id.
-            with c.session_transaction() as s:
-                self.assertNotIn('user_id', s)
-
-
-    def testLoginSuccess(self):
+    def testSuccess(self):
 
         ''' Valid credentials should log the admin in. '''
 
