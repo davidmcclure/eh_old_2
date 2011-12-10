@@ -1,5 +1,5 @@
 '''
-Unit tests for the user model.
+Integration tests for the admin controller.
 '''
 
 # Get the abstract class and models.
@@ -131,9 +131,9 @@ class AdminNewTest(i.IntegrationTestCase):
 
 
 
-class AdminStartTest(i.IntegrationTestCase):
+class AdminDeleteTest(i.IntegrationTestCase):
 
-    ''' /admin/start '''
+    ''' /admin/delete '''
 
 
     def testDelete(self):
@@ -175,18 +175,18 @@ class AdminStartTest(i.IntegrationTestCase):
 
 
 
-class AdminStopTest(i.IntegrationTestCase):
+class AdminStartTest(i.IntegrationTestCase):
 
-    ''' /admin/stop '''
+    ''' /admin/start '''
 
 
     pass
 
 
 
-class AdminDeleteTest(i.IntegrationTestCase):
+class AdminStopTest(i.IntegrationTestCase):
 
-    ''' /admin/delete '''
+    ''' /admin/stop '''
 
 
     pass

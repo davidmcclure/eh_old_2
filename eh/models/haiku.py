@@ -20,9 +20,6 @@ class Haiku(db.Model):
     url_slug = db.Column(db.String(40), unique=True)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_on = db.Column(db.DateTime)
-    started = db.Column(db.Boolean, default=False)
-    finished = db.Column(db.Boolean, default=False)
-    is_running = db.Column(db.Boolean, default=False)
 
     # Rule parameters:
     word_round_length = db.Column(db.Integer)
@@ -48,8 +45,8 @@ class Haiku(db.Model):
         ''' Set parameters. '''
 
         self.created_by =               userId
-        self.url_slug =                 slug
         self.created_on =               dt.datetime.now()
+        self.url_slug =                 slug
         self.word_round_length =        roundLength
         self.slicing_interval =         interval
         self.min_blind_submissions =    minSubmissions
@@ -106,19 +103,3 @@ class Haiku(db.Model):
         haiku = Haiku.query.get(id)
         db.session.delete(haiku)
         db.session.commit()
-
-
-    @classmethod
-    def startHaiku(self, id):
-
-        ''' Start a haiku. '''
-
-        pass
-
-
-    @classmethod
-    def stopHaiku(self, id):
-
-        ''' Stop a haiku. '''
-
-        pass

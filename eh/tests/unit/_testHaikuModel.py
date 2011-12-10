@@ -99,23 +99,5 @@ class UserModelUnitTest(u.UnitTestCase):
         self.assertEquals(retrievedHaiku.id, haiku2.id)
 
 
-    def testStartHaiku(self):
-
-        '''
-        Test start haiku.
-        '''
-
-        pass
-
-
-    def testStopHaiku(self):
-
-        '''
-        Test stop haiku.
-        '''
-
-        pass
-
-
 if __name__ == '__main__':
     u.unittest.main()
