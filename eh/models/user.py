@@ -3,7 +3,7 @@ The user model for administrators and participants.
 '''
 
 # Get application assets.
-from eh import app, db
+from eh import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime as dt
 

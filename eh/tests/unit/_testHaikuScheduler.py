@@ -13,7 +13,9 @@ class HaikuSchedulerUnitTest(u.UnitTestCase):
 
     def setUp(self):
 
-        ''' Instantiate the scheduler. '''
+        '''
+        Instantiate the scheduler.
+        '''
 
         super(HaikuSchedulerUnitTest, self).setUp()
 
@@ -112,11 +114,7 @@ class HaikuSchedulerUnitTest(u.UnitTestCase):
             pass
 
         # Add a slicer.
-        slicer = self.sched.createSlicer(self.haiku, testSlicer, 1)
-
-        # Check the attributes.
-        self.assertEquals(slicer.name, 'username' + str(self.haiku.id))
-        self.assertEquals(slicer.func, testSlicer)
+        slicer = self.sched.createSlicer(self.haiku, testSlicer)
 
         # Confirm that the job is stored in the scheduler.
         self.assertIn(slicer, self.sched.get_jobs())
@@ -140,8 +138,8 @@ class HaikuSchedulerUnitTest(u.UnitTestCase):
             seconds = 1,
             jobstore = HaikuScheduler.JOBSTORE)
 
-        # Tru to add a slicer.
-        slicer = self.sched.createSlicer(self.haiku, testSlicer, 1)
+        # Try to add a slicer.
+        slicer = self.sched.createSlicer(self.haiku, testSlicer)
         self.assertFalse(slicer)
 
         # Confirm that the job is not stored in the scheduler.

@@ -7,7 +7,7 @@
         {% for h in haiku %}
         <tr>
             <td><a href="/{{ h.url_slug }}">/{{ h.url_slug }}</a></td>
-            {% if not h.is_running %}
+            {% if not sched.checkForSlicer(h) %}
             <td><a href="{{ url_for('start', id=h.id) }}">start</a></td>
             {% else %}
             <td><a href="{{ url_for('stop', id=h.id) }}">stop</a></td>

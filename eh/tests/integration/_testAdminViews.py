@@ -4,6 +4,7 @@ Integration tests for the admin controller.
 
 # Get the abstract class and models.
 import IntegrationTestCase as i
+from eh import sched
 from eh.models import User, Haiku
 from eh.lib.messages import errors as e
 from werkzeug.security import check_password_hash
@@ -180,7 +181,30 @@ class AdminStartTest(i.IntegrationTestCase):
     ''' /admin/start '''
 
 
-    pass
+    def testStart(self):
+
+        ''' A GET request should run the slicer for the haiku. '''
+
+        # Create an admin and haiku.
+        admin = User.createAdministrator('username', 'password')
+        haiku = Haiku.createHaiku(admin.id, 'test', 1000, 1, 5, 100, 30, 1000)
+
+        with self.app as c:
+
+            # Re-get the haiku.
+            haiku = Haiku.getHaikuBySlug('test')
+
+            # Push in a user id.
+            with c.session_transaction() as s:
+                s['user_id'] = admin.id
+
+            # Hit the route, check for redirect back to browse.
+            rv = c.get('/admin/start/' + str(haiku.id), follow_redirects=True)
+            self.assertTemplateUsed('admin/browse.html')
+
+            # Check for the slicer.
+            job = sched.getJobByHaiku(haiku)
+            self.assertIsNot(job, False)
 
 
 

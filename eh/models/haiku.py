@@ -3,7 +3,7 @@ The core poem model.
 '''
 
 # Get application assets.
-from eh import app, db
+from eh import db
 import datetime as dt
 import math
 

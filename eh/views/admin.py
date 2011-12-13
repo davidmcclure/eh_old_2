@@ -4,8 +4,8 @@ Administrative views. Create, start, stop, and delete poems.
 
 # Get application assets.
 from flask import session, redirect, url_for, request, render_template
-from eh import app, db
-from eh.helpers import auth, validation
+from eh import app, db, sched
+from eh.helpers import auth, validation, slicer
 import eh.models as models
 
 
@@ -21,7 +21,8 @@ def browse(admin):
 
     return render_template(
             'admin/browse.html',
-            haiku = haiku)
+            haiku = haiku,
+            sched = sched)
 
 
 @app.route('/admin/new', methods=['GET', 'POST'])
@@ -85,7 +86,11 @@ def start(admin, id):
 
     ''' Start a haiku. '''
 
-    pass
+    # Get the record, start the slicer.
+    haiku = models.Haiku.query.get(id)
+    sched.createSlicer(haiku, slicer.slice)
+
+    return redirect(url_for('browse'))
 
 
 @app.route('/admin/stop/<id>')

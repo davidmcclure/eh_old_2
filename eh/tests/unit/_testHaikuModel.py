@@ -2,9 +2,10 @@
 Unit tests for the haiku model.
 '''
 
-from eh import app, db
+from eh import app, db, sched
 from eh.models import Haiku, User
 import UnitTestCase as u
+import datetime as dt
 import math
 
 
@@ -14,11 +15,15 @@ class UserModelUnitTest(u.UnitTestCase):
     def testRecordInitialization(self):
 
         '''
-        Test object creation and starting attribute setting.
+        __init__() should create the object and set starting attributes.
         '''
 
+        # Create user and haiku.
         user = User.createAdministrator('username', 'password')
         haiku = Haiku(user.id, 'test', 1000, 1, 5, 100, 30, 1000)
+
+        # Get time delta.
+        timeDelta = (dt.datetime.now() - haiku.created_on).total_seconds()
 
         # Check attribute assignments.
         self.assertEqual(haiku.created_by, user.id)
@@ -29,23 +34,24 @@ class UserModelUnitTest(u.UnitTestCase):
         self.assertEqual(haiku.blind_submission_value, 100)
         self.assertEqual(haiku.decay_mean_lifetime, 30 / math.log(2))
         self.assertEqual(haiku.seed_capital, 1000)
-        self.assertIsNotNone(haiku.created_on)
+        self.assertLess(timeDelta, 0.1)
 
 
     def testCreateHaiku(self):
 
         '''
-        Test record creation.
+        createHaiku() should create and save a new record.
         '''
-
-        # Create user.
-        user = User.createAdministrator('username', 'password')
 
         # At start, no records.
         self.assertEquals(Haiku.query.count(), 0)
 
-        # Create.
+        # Create records.
+        user = User.createAdministrator('username', 'password')
         haiku = Haiku.createHaiku(user.id, 'test', 1000, 1, 5, 100, 30, 1000)
+
+        # Get time delta.
+        timeDelta = (dt.datetime.now() - haiku.created_on).total_seconds()
 
         # Check for the new record, fetch.
         self.assertEquals(Haiku.query.count(), 1)
@@ -60,13 +66,13 @@ class UserModelUnitTest(u.UnitTestCase):
         self.assertEqual(retrievedHaiku.blind_submission_value, 100)
         self.assertEqual(retrievedHaiku.decay_mean_lifetime, 30 / math.log(2))
         self.assertEqual(retrievedHaiku.seed_capital, 1000)
-        self.assertIsNotNone(retrievedHaiku.created_on)
+        self.assertLess(timeDelta, 0.1)
 
 
     def testGetHaikuBySlug(self):
 
         '''
-        Test record retrieval by slug.
+        getHaikuBySlug() should get a record by the url slug.
         '''
 
         # Create records.
@@ -81,7 +87,7 @@ class UserModelUnitTest(u.UnitTestCase):
     def testDeleteHaiku(self):
 
         '''
-        Test delete haiku.
+        deleteHaiku() should delete a record.
         '''
 
         # Create records.
@@ -97,6 +103,7 @@ class UserModelUnitTest(u.UnitTestCase):
         self.assertEquals(Haiku.query.count(), 1)
         retrievedHaiku = Haiku.query.first()
         self.assertEquals(retrievedHaiku.id, haiku2.id)
+
 
 
 if __name__ == '__main__':

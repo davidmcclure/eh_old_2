@@ -52,7 +52,7 @@ class HaikuScheduler(Scheduler):
         return True if self.getJobByHaiku(haiku) else False
 
 
-    def createSlicer(self, haiku, func, seconds):
+    def createSlicer(self, haiku, func):
 
         ''' Start slicing for a poem. '''
 
@@ -61,7 +61,7 @@ class HaikuScheduler(Scheduler):
 
             return self.add_interval_job(
                 func = func,
-                seconds = seconds,
+                seconds = haiku.slicing_interval,
                 name = self.getJobName(haiku),
                 jobstore = HaikuScheduler.JOBSTORE)
 

@@ -14,5 +14,10 @@ app.secret_key = key.secret
 from flaskext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
 
+# Run the scheduler.
+from eh.helpers.scheduler import HaikuScheduler
+sched = HaikuScheduler()
+sched.start()
+
 # Import application assets.
 from eh.views import admin
