@@ -100,7 +100,11 @@ def stop(admin, id):
 
     ''' Stop a haiku. '''
 
-    pass
+    # Get the record, stop the slicer.
+    haiku = models.Haiku.query.get(id)
+    sched.deleteSlicer(haiku)
+
+    return redirect(url_for('browse'))
 
 
 @app.route('/admin/delete/<id>')
