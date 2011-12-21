@@ -2,7 +2,7 @@
 Abstract class for integration tests.
 '''
 
-from eh import app, db
+from eh import app, db, sched
 import unittest
 import blinker
 from flask import template_rendered
@@ -25,6 +25,15 @@ class IntegrationTestCase(unittest.TestCase):
 
         self.templates = []
         template_rendered.connect(self.addTemplate)
+
+
+    def tearDown(self):
+
+        '''
+        Shutdown the scheduler.
+        '''
+
+        sched.shutdown()
 
 
     def addTemplate(self,app, template, context):

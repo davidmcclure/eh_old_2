@@ -17,6 +17,9 @@ class Word(db.Model):
 
     # System attributes:
     id = db.Column(db.Integer, primary_key=True)
+    haiku_id = db.Column(db.Integer, db.ForeignKey('haiku.id'))
+    round_id = db.Column(db.Integer, db.ForeignKey('rounds.id'))
+    word = db.Column(db.String(60))
 
 
     # Row methods:

@@ -29,7 +29,9 @@ class AdminNewTest(i.IntegrationTestCase):
 
     def testForm(self):
 
-        ''' With a GET request, /admin/new should show the form. '''
+        '''
+        With a GET request, /admin/new should show the form.
+        '''
 
         # Create an admin.
         admin = User.createAdministrator('username', 'password')
@@ -47,7 +49,9 @@ class AdminNewTest(i.IntegrationTestCase):
 
     def testFailure(self):
 
-        ''' Flash errors for invalid submission. '''
+        '''
+        Flash errors for invalid submission.
+        '''
 
         # Create an admin.
         admin = User.createAdministrator('username', 'password')
@@ -90,7 +94,9 @@ class AdminNewTest(i.IntegrationTestCase):
 
     def testSuccess(self):
 
-        ''' Valid form should create new haiku. '''
+        '''
+        Valid form should create new haiku.
+        '''
 
         # Create an admin.
         admin = User.createAdministrator('username', 'password')
@@ -140,16 +146,16 @@ class AdminDeleteTest(i.IntegrationTestCase):
 
     def testDelete(self):
 
-        ''' A GET request should delete the haiku. '''
+        '''
+        A GET request should delete the haiku.
+        '''
 
         # Create an admin and haiku.
         admin = User.createAdministrator('username', 'password')
 
         # Create 2 haiku.
-        haiku1 = Haiku.createHaiku(
-                admin.id, 'test1', 1000, 1, 5, 100, 30, 1000)
-        haiku2 = Haiku.createHaiku(
-                admin.id, 'test2', 1000, 1, 5, 100, 30, 1000)
+        haiku1 = Haiku.createHaiku(admin.id, 'test1', 1000, 1, 5, 100, 30, 1000)
+        haiku2 = Haiku.createHaiku(admin.id, 'test2', 1000, 1, 5, 100, 30, 1000)
 
         with self.app as c:
 
@@ -184,7 +190,9 @@ class AdminStartTest(i.IntegrationTestCase):
 
     def testStart(self):
 
-        ''' A GET request should run the slicer for the haiku. '''
+        '''
+        A GET request should run the slicer for the haiku.
+        '''
 
         # Create an admin and haiku.
         admin = User.createAdministrator('username', 'password')
@@ -216,7 +224,9 @@ class AdminStopTest(i.IntegrationTestCase):
 
     def testStop(self):
 
-        ''' A GET request should stop the slicer for a haiku. '''
+        '''
+        A GET request should stop the slicer for a haiku.
+        '''
 
         # Create an admin and haiku.
         admin = User.createAdministrator('username', 'password')
@@ -251,7 +261,9 @@ class AdminRegisterTest(i.IntegrationTestCase):
 
     def testForm(self):
 
-        ''' With a GET request, /admin/register should show the form. '''
+        '''
+        With a GET request, /admin/register should show the form.
+        '''
 
         # Hit with GET.
         rv = self.app.get('/admin/register')
@@ -260,7 +272,9 @@ class AdminRegisterTest(i.IntegrationTestCase):
 
     def testFailure(self):
 
-        ''' Flash errors for invalid submission. '''
+        '''
+        Flash errors for invalid submission.
+        '''
 
         # At start, no users.
         self.assertEquals(User.query.count(), 0)
@@ -286,7 +300,9 @@ class AdminRegisterTest(i.IntegrationTestCase):
 
     def testSuccess(self):
 
-        ''' Valid registration form should create user. '''
+        '''
+        Valid registration form should create user.
+        '''
 
         # At start, no users.
         self.assertEquals(User.query.count(), 0)
@@ -318,7 +334,9 @@ class AdminLoginTest(i.IntegrationTestCase):
 
     def testForm(self):
 
-        ''' With a GET request, /admin/login should show the form. '''
+        '''
+        With a GET request, /admin/login should show the form.
+        '''
 
         # Create an admin.
         admin = User.createAdministrator('username', 'password')
@@ -330,7 +348,9 @@ class AdminLoginTest(i.IntegrationTestCase):
 
     def testFailure(self):
 
-        ''' Flash errors when fields are empty. '''
+        '''
+        Flash errors when fields are empty.
+        '''
 
         # Create an admin.
         admin = User.createAdministrator('username', 'password')
@@ -357,7 +377,9 @@ class AdminLoginTest(i.IntegrationTestCase):
 
     def testSuccess(self):
 
-        ''' Valid credentials should log the admin in. '''
+        '''
+        Valid credentials should log the admin in.
+        '''
 
         # Create an admin.
         admin = User.createAdministrator('username', 'password')
@@ -386,7 +408,9 @@ class AdminLogoutTest(i.IntegrationTestCase):
 
     def testUserIdKeyPop(self):
 
-        ''' Existing user_id should be popped off of session. '''
+        '''
+        Existing user_id should be popped off of session.
+        '''
 
         # Create admin.
         admin = User.createAdministrator('username', 'password')
@@ -410,7 +434,9 @@ class AdminLogoutTest(i.IntegrationTestCase):
 
     def testRedirect(self):
 
-        ''' Logout route should redirect to login. '''
+        '''
+        Logout route should redirect to login.
+        '''
 
         # Create admin.
         admin = User.createAdministrator('username', 'password')
